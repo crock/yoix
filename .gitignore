@@ -1,0 +1,8 @@
+# built site
+public
+
+# npm dependencies
+node_modules
+
+# macOS file
+.DS_Store

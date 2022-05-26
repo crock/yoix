@@ -1,0 +1,25 @@
+{
+    "name": "yoix",
+    "version": "0.1.0-dev+1",
+    "private": false,
+    "description": "A simple, lightweight static site generator for Node.js",
+    "author": {
+        "name": "Alex Crocker",
+        "email": "hello@crock.dev"
+    },
+    "main": "yoix.js",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/crock/yoix.git"
+    },
+    "directories": {
+        "lib": "./libs/"
+    },
+    "engines": {
+        "node" : ">=14"
+    },
+    "scripts": {
+        "start": "node yoix.js"
+    }
+}
