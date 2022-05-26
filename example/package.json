@@ -1,0 +1,10 @@
+{
+    "name": "example",
+    "private": true,
+    "scripts": {
+        "start": "yoix"
+    },
+    "dependencies": {
+        "yoix": "^0.1.0-dev+2"
+    }
+}
