@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { buildPages } = require('./core')
 const fs = require('fs')
 const path = require('path')

@@ -1,6 +1,6 @@
 {
     "name": "yoix",
-    "version": "0.1.0-dev+2",
+    "version": "0.1.1-dev+3",
     "private": false,
     "description": "A simple, lightweight static site generator for Node.js",
     "author": {
