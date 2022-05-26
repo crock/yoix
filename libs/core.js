@@ -1,10 +1,10 @@
-const fs = require('fs')
-const path = require('path')
+var fs = require('fs')
+var path = require('path')
 
-const pagesDir = path.join(process.cwd(), 'pages')
-const publicDir = path.join(process.cwd(), 'public')
-const staticDir = path.join(process.cwd(), 'static')
-const rootPath = process.cwd()
+var pagesDir = path.join(process.cwd(), 'pages')
+var publicDir = path.join(process.cwd(), 'public')
+var staticDir = path.join(process.cwd(), 'static')
+var rootPath = process.cwd()
 
 function getAllFiles(dirPath, arrayOfFiles) {
     files = fs.readdirSync(dirPath)
@@ -23,7 +23,7 @@ function getAllFiles(dirPath, arrayOfFiles) {
 }
 
 function parseMarkdown(markdownText) {
-	const htmlText = markdownText
+	var htmlText = markdownText
 		.replace(/^### (.*$)/gim, '<h3>$1</h3>')
 		.replace(/^## (.*$)/gim, '<h2>$1</h2>')
 		.replace(/^# (.*$)/gim, '<h1>$1</h1>')
@@ -138,12 +138,12 @@ exports.buildHead = () => {
 }
 
 exports.generateScriptTags = (scripts = []) => {
-    const tags = scripts.map(script => `<script src="${script.src}" type="${script.type}" ${script.async ? "async" : ""}>${script.children ? `${script.children}</script>` : "</script>"}`)
+    var tags = scripts.map(script => `<script src="${script.src}" type="${script.type}" ${script.async ? "async" : ""}>${script.children ? `${script.children}</script>` : "</script>"}`)
     return tags.join('\n')
 }
 
 exports.linkExternalStyleSheets = (stylesheets = []) => {
-    const tags = stylesheets.map(stylesheet => `<link href="${stylesheet.href}" type="text/css" rel="stylesheet" />`)
+    var tags = stylesheets.map(stylesheet => `<link href="${stylesheet.href}" type="text/css" rel="stylesheet" />`)
     return tags.join('\n')
 }
 

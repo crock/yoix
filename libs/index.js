@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-const { buildPages } = require('./core')
-const fs = require('fs')
-const path = require('path')
+var { buildPages } = require('./core')
+var fs = require('fs')
+var path = require('path')
 
-const configPath = path.join(process.cwd(), "config.json")
+var configPath = path.join(process.cwd(), "config.json")
 
 function main() {
     let config = {}

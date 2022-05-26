@@ -5,6 +5,6 @@
         "start": "yoix"
     },
     "dependencies": {
-        "yoix": "^0.1.1-dev+3"
+        "yoix": "latest"
     }
 }
