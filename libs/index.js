@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-var { buildPages } = require('./core')
-var fs = require('fs')
-var path = require('path')
+import { buildPages } from './core.js'
+import fs from 'node:fs'
+import path from 'node:path'
 
-var configPath = path.join(process.cwd(), "config.json")
+const configPath = path.join(process.cwd(), "config.json")
 
 function main() {
     let config = {}
 
     if ( fs.existsSync(configPath) )  {
-        config = require(configPath)
+        config = JSON.parse(fs.readFileSync(configPath, 'utf8'))
     }
 
     buildPages()

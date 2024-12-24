@@ -1,6 +1,7 @@
 {
+    "type": "module",
     "name": "yoix",
-    "version": "0.1.2-dev+4",
+    "version": "0.1.6-dev",
     "private": false,
     "description": "A simple, lightweight static site generator for Node.js",
     "author": {
@@ -18,11 +19,11 @@
     },
     "bin" : { "yoix" : "./libs/index.js" },
     "engines": {
-        "node": ">=14"
+        "node": ">=22"
     },
     "devDependencies": {
-        "@types/node": "^17.0.35",
-        "typescript": "^4.7.2"
+        "@types/node": "^22.10.2",
+        "typescript": "^5.7.2"
     },
     "workspaces": ["example"]
 }

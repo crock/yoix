@@ -1,1 +1,7 @@
-{}
+{
+    "site": {
+        "title": "Yoix",
+        "description": "Yoix is a static site generator for the web.",
+        "url": "https://yoix.org"
+    }
+}

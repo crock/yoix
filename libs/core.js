@@ -1,13 +1,13 @@
-var fs = require('fs')
-var path = require('path')
+import fs from 'node:fs'
+import path from 'node:path'
 
-var pagesDir = path.join(process.cwd(), 'pages')
-var publicDir = path.join(process.cwd(), 'public')
-var staticDir = path.join(process.cwd(), 'static')
-var rootPath = process.cwd()
+const pagesDir = path.join(process.cwd(), 'pages')
+const publicDir = path.join(process.cwd(), 'public')
+const staticDir = path.join(process.cwd(), 'static')
+const rootPath = process.cwd()
 
 function getAllFiles(dirPath, arrayOfFiles) {
-    files = fs.readdirSync(dirPath)
+    const files = fs.readdirSync(dirPath)
   
     arrayOfFiles = arrayOfFiles || []
   
@@ -23,7 +23,7 @@ function getAllFiles(dirPath, arrayOfFiles) {
 }
 
 function parseMarkdown(markdownText) {
-	var htmlText = markdownText
+	const htmlText = markdownText
 		.replace(/^### (.*$)/gim, '<h3>$1</h3>')
 		.replace(/^## (.*$)/gim, '<h2>$1</h2>')
 		.replace(/^# (.*$)/gim, '<h1>$1</h1>')
@@ -37,10 +37,10 @@ function parseMarkdown(markdownText) {
 	return htmlText.trim()
 }
 
-exports.buildPages = () => {
+export function buildPages() {
     let files = getAllFiles(pagesDir)
     // console.log(files)
-    var pageStyles = `
+    const pageStyles = `
 body { padding: 1rem; font-size: 20px; font-weight: 300; font-family: 'Avenir', sans-serif; }
 h1 { font-weight: black; font-size: 26px; margin-bottom: 16px; }   
 `
@@ -51,28 +51,28 @@ h1 { font-weight: black; font-size: 26px; margin-bottom: 16px; }
         }
 
         files.forEach(fp => {
-            var permalink = fp.replace(`${rootPath}/pages`, '')
+            const permalink = fp.replace(`${rootPath}/pages`, '')
             let pathSegments = permalink.split('/')
-            var filename = pathSegments.pop()
-            var [name, extension] = filename.split('.')
+            const filename = pathSegments.pop()
+            const [name, extension] = filename.split('.')
             if (extension != undefined) {
                 if (!fs.existsSync(path.join(publicDir, name)) && name != 'index') {
                     fs.mkdirSync(path.join(publicDir, name))
                 }
-                var pathSegmentsWithoutFilename = pathSegments.filter(Boolean)
+                const pathSegmentsWithoutFilename = pathSegments.filter(Boolean)
                 if (pathSegmentsWithoutFilename.length > 1) {
                     if (!fs.existsSync(path.join(publicDir, ...pathSegmentsWithoutFilename))) {
                         fs.mkdirSync(path.join(publicDir, ...pathSegmentsWithoutFilename))
                     }
-                    var nestedPageFp = path.join(pagesDir, ...pathSegmentsWithoutFilename, 'index.md')
-                    var contents = fs.readFileSync(nestedPageFp).toString('utf-8')
-                    var html = this.buildDocument(contents, pageStyles)
-                    var pagePath = path.join(publicDir, ...pathSegmentsWithoutFilename, 'index.html')
+                    const nestedPageFp = path.join(pagesDir, ...pathSegmentsWithoutFilename, 'index.md')
+                    const contents = fs.readFileSync(nestedPageFp).toString('utf-8')
+                    const html = buildDocument(contents, pageStyles)
+                    const pagePath = path.join(publicDir, ...pathSegmentsWithoutFilename, 'index.html')
                     fs.writeFileSync(pagePath, html)
                 } else {
-                    var contents = fs.readFileSync(fp).toString('utf-8')
-                    var html = this.buildDocument(contents, pageStyles)
-                    var pagePath = name === 'index' ? path.join(publicDir, 'index.html') : path.join(publicDir, name, 'index.html')
+                    const contents = fs.readFileSync(fp).toString('utf-8')
+                    const html = buildDocument(contents, pageStyles)
+                    const pagePath = name === 'index' ? path.join(publicDir, 'index.html') : path.join(publicDir, name, 'index.html')
                     fs.writeFileSync(pagePath, html)
                 }
             } else {
@@ -83,7 +83,7 @@ h1 { font-weight: black; font-size: 26px; margin-bottom: 16px; }
     }
 }
 
-exports.buildDocument = (content, pageStyles) => {
+const buildDocument = (content, pageStyles) => {
     let doc = ""
 
     doc += `
@@ -91,36 +91,49 @@ exports.buildDocument = (content, pageStyles) => {
 <html lang="en">
 
 `
-    doc += this.buildHead()
-    doc += this.globalStyles(pageStyles)
-    doc += this.buildBody(parseMarkdown(content))
+    doc += buildHead()
+    doc += globalStyles(pageStyles)
+    doc += buildBody(parseMarkdown(content))
 
     doc += `
 
 </html>
 `
 
-    this.copyStaticAssets()
+    copyStaticAssets()
     // console.log(doc)
     return doc
 }
 
-exports.buildHead = () => {
+const buildHead = (config) => {
+
+    if (!config) {
+        config = {
+            site: {
+                title: "Yoix",
+                description: "Yoix is a static site generator for the web.",
+                url: "https://yoix.org"
+            }
+        }
+    }
+
     let head = ""
 
     head += `
 <head>
 `
 
-    head += this.linkExternalStyleSheets([
+    head += `<title>${config.site.title}</title>`
+
+    head += linkExternalStyleSheets([
         {
-            href: 'https://example.com/style.css'
+            href: `${config.site.url}/styles.css`
         }
     ])
 
     head += '\n'
 
-    head += this.generateScriptTags([
+    head += generateScriptTags([
         {
             src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
             async: true,
@@ -133,21 +146,21 @@ exports.buildHead = () => {
 </head>    
 `
 
-    // console.log(head)
+    console.log(head)
     return head
 }
 
-exports.generateScriptTags = (scripts = []) => {
-    var tags = scripts.map(script => `<script src="${script.src}" type="${script.type}" ${script.async ? "async" : ""}>${script.children ? `${script.children}</script>` : "</script>"}`)
+const generateScriptTags = (scripts = []) => {
+    const tags = scripts.map(script => `<script src="${script.src}" type="${script.type}" ${script.async ? "async" : ""}>${script.children ? `${script.children}</script>` : "</script>"}`)
     return tags.join('\n')
 }
 
-exports.linkExternalStyleSheets = (stylesheets = []) => {
-    var tags = stylesheets.map(stylesheet => `<link href="${stylesheet.href}" type="text/css" rel="stylesheet" />`)
+const linkExternalStyleSheets = (stylesheets = []) => {
+    const tags = stylesheets.map(stylesheet => `<link href="${stylesheet.href}" type="text/css" rel="stylesheet" />`)
     return tags.join('\n')
 }
 
-exports.buildBody = (content = "") => {
+const buildBody = (content = "") => {
     let body = ""
 
     body += `
@@ -164,20 +177,20 @@ exports.buildBody = (content = "") => {
     return body
 }
 
-exports.resetStyles = () => {
-    var css = fs.readFileSync(path.join(staticDir,'reset.css')).toString('utf-8')
+const resetStyles = () => {
+    const css = fs.readFileSync(path.join(staticDir,'reset.css')).toString('utf-8')
     return css
 }
 
-exports.globalStyles = (custom = "") => {
+const globalStyles = (custom = "") => {
     let css = "<style>\n"
 
-    css += this.resetStyles()
+    css += resetStyles()
     css += `
 :root {
     --primary-color: #3ebb79;
 }
-a { color: var(--primary-color); } 
+a { color: const(--primary-color); } 
 strong { font-weight: bold; }
 em { font-style: italic; }
 
@@ -189,7 +202,7 @@ em { font-style: italic; }
     return css
 }
 
-exports.copyStaticAssets = () => {
-    var files = getAllFiles(staticDir)
+const copyStaticAssets = () => {
+    const files = getAllFiles(staticDir)
     files.forEach(file => fs.copyFileSync(file, path.join(publicDir, path.basename(file))))
 }
